@@ -12,7 +12,6 @@
 #include "Bounce.h"
 #include "Adafruit_SSD1306.h"
 
-
 using namespace braids;
 
 
@@ -90,6 +89,24 @@ display.begin(SSD1306_SWITCHCAPVCC, 0x3C);     // initialize with the I2C addr 0
   display.setCursor(0, 15);
   display.println("S");
   display.display();
+}
+
+void drawIntro(){
+	delay(100);
+for (int16_t i=0; i<display.height(); i+=2) {
+	delay((i*3)|5);
+	display.clearDisplay();
+	for (int j = 0; j < 20; j+= 5)
+	{
+
+	display.drawCircle(display.width()/2, display.height()/2, i+j, WHITE);
+	display.drawCircle(display.width()/2, display.height()/2, i%j, WHITE);
+		
+	}
+    
+    display.display();
+  }
+
 }
 
 void ui() {
@@ -190,7 +207,7 @@ extern "C" int main(void)
 	delay(500);
 //	lcd.clear();
 	initDisplay();
-	
+	drawIntro();
 	// Loop
 	while (1) {
 
