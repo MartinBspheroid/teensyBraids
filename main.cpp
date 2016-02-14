@@ -5,7 +5,7 @@
 #define STRIKE 20
 #include "WProgram.h"
 #include "Arduino.h"
-#include "LiquidCrystalFast.h"
+//#include "LiquidCrystalFast.h"
 #include "macro_oscillator.h"
 #include "envelope.h"
 #include "names.h"
@@ -16,11 +16,12 @@
 using namespace braids;
 
 
-LiquidCrystalFast lcd(4, 6, 5, 9, 10, 11, 12);
+//LiquidCrystalFast lcd(4, 6, 5, 9, 10, 11, 12);
 Bounce butt(BT, 10);
 Bounce strikeButt(STRIKE, 10);
 
 MacroOscillator osc;
+
 Envelope env;
 IntervalTimer myTimer;
 Adafruit_SSD1306 display(5);
@@ -66,17 +67,17 @@ uint8_t midi_event;
 volatile uint8_t lcdCounter;
 bool LDC_ENABLE  = true;
 
-void displayStuff() {
-	lcd.clear();
-	lcd.setCursor(0,1);
-	lcd.print(names[shape]);		
+// void displayStuff() {
+// 	lcd.clear();
+// 	lcd.setCursor(0,1);
+// 	lcd.print(names[shape]);		
 	
-	lcd.print(color >> 6);
-	lcd.print("  ");
-	lcd.print(timbre >> 4);
-}
+// 	lcd.print(color >> 6);
+// 	lcd.print("  ");
+// 	lcd.print(timbre >> 4);
+// }
 void initDisplay(){
-	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);     // initialize with the I2C addr 0x3C (for the 128x64)
+display.begin(SSD1306_SWITCHCAPVCC, 0x3C);     // initialize with the I2C addr 0x3C (for the 128x64)
   display.clearDisplay();   // clears the screen and buffer
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -95,7 +96,7 @@ void ui() {
 
 	
 	if (butt.update() || strikeButt.update()) {
-		displayStuff();
+	//	displayStuff();
 		if (strikeButt.fallingEdge()) {
 
 			
@@ -117,7 +118,7 @@ void ui() {
 		// Sets the shape
 		MacroOscillatorShape osc_shape = static_cast<MacroOscillatorShape>(shape);//
 		osc.set_shape(osc_shape);
-		displayStuff();
+	//	displayStuff();
 			//MacroOscillatorShape osc_shape = static_cast<MacroOscillatorShape>(shape);//
 			//osc.set_shape(osc_shape);
 
@@ -170,6 +171,7 @@ extern "C" int main(void)
 
 	// Initializes the objects
 	osc.Init();
+
 	env.Init();
 	osc.set_shape(MACRO_OSC_SHAPE_CSAW);
 	osc.set_parameters(0, 0);
@@ -181,12 +183,12 @@ extern "C" int main(void)
 
 	pitch = 44 << 7;
 //	lcd.init(4, 5, 9, 10, 11, 12);
-	lcd.begin(16, 2);
+//	lcd.begin(16, 2);
 	// Print a message to the LCD.
-	lcd.print("braidsTime!");
+	//lcd.print("braidsTime!");
 
 	delay(500);
-	lcd.clear();
+//	lcd.clear();
 	initDisplay();
 	
 	// Loop
