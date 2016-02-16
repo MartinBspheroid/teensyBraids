@@ -11,10 +11,10 @@
 #include "names.h"
 #include "Bounce.h"
 #include "Adafruit_SSD1306.h"
-
+#include "ui.h"
 
 using namespace braids;
-
+using namespace MB;
 
 //LiquidCrystalFast lcd(4, 6, 5, 9, 10, 11, 12);
 Bounce butt(BT, 10);
@@ -23,7 +23,8 @@ Bounce strikeButt(STRIKE, 10);
 MacroOscillator osc;
 Envelope env;
 IntervalTimer myTimer;
-Adafruit_SSD1306 display(5);
+//Adafruit_SSD1306 display(5);
+UI mui;
 
 const uint32_t kSampleRate = 96000;
 const uint16_t kAudioBlockSize = 28;
@@ -63,21 +64,6 @@ int16_t disp_release;
 volatile uint8_t done;
 uint8_t midi_event;
 
-void initDisplay(){
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);     // initialize with the I2C addr 0x3C (for the 128x64)
-  display.clearDisplay();   // clears the screen and buffer
-  display.setTextSize(1);
-  display.setTextColor(WHITE);
-  display.setCursor(0, 0);
-  display.println("Braids");
-  display.setCursor(10, 30);
-  display.println("@");
-  display.setCursor(10, 45);
-  display.println("Teensy");
-  display.setCursor(0, 15);
-  display.println("S");
-  display.display();
-}
 
 void ui() {
 

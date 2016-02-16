@@ -30,7 +30,10 @@ COMPILERPATH = $(ARDUINOHOME)/hardware/tools/arm/bin
 #************************************************************************
 
 # CPPFLAGS = compiler options for C and C++
-CPPFLAGS = -Wall -g -Os -mcpu=cortex-m4 -mthumb -nostdlib -MMD $(OPTIONS) -I. -I./stmlib/third_party/STM 
+OPTIMIZATION = 3
+CPPFLAGS = -Wall -g  -mcpu=cortex-m4 -mthumb -nostdlib -MMD $(OPTIONS) -I. -I./stmlib/third_party/STM -O$(OPTIMIZATION) -J 4
+
+
 
 # compiler options for C++ only
 CXXFLAGS = -std=gnu++0x -felide-constructors -fno-exceptions -fno-rtti
@@ -59,12 +62,14 @@ CC_FILES := $(wildcard *.cc)
 OBJS := $(C_FILES:.c=.o) $(CPP_FILES:.cpp=.o) $(CC_FILES:.cc=.o)
 
 
+
+
 # the actual makefile rules (all .o files built by GNU make's default implicit rules)
 
 all: $(TARGET).hex
 
 $(TARGET).elf: $(OBJS) mk20dx256.ld
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) 
 
 %.hex: %.elf
 	$(SIZE) $<
@@ -82,8 +87,6 @@ clean:
 upload:
 	$(TOOLSPATH)/teensy_post_compile -file=$(TARGET) -path=$(shell pwd) -tools=$(TOOLSPATH)
 	-$(TOOLSPATH)/teensy_reboot
-
- 
 
 #	teensy_loader_cli -mmcu=$(MCU) -s -w -v  $(TARGET).hex
 	
