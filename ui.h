@@ -10,7 +10,9 @@ namespace MB {
 class UI
 {
 public:
-	UI(){};
+	UI(){
+		isDirty = true;
+	};
 	~UI(){};
 	void init() {
 		display.setResetPin(5);
@@ -19,9 +21,22 @@ public:
 
 		display.display();
 	}
-	void draw(){};
+	void draw(){
+
+
+
+		if (isDirty)
+		{
+			display.display();
+			isDirty = false;
+		}
+	};
 	void update() {
 		//readADC
+		// sequentily
+
+		// if parameters does not match, change them
+		// set flag to update
 
 	}
 
@@ -33,6 +48,7 @@ private:
 	uint16_t mParams[4];
 	uint8_t adcIndex;
 	uint8_t displayIndex;
+	bool isDirty;
 
 };
 }

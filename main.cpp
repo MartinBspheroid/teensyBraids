@@ -15,17 +15,14 @@
 
 
 using namespace braids;
-using namespace MB;
 
-//LiquidCrystalFast lcd(4, 6, 5, 9, 10, 11, 12);
 Bounce butt(BT, 10);
 Bounce strikeButt(STRIKE, 10);
 
 MacroOscillator osc;
 Envelope env;
 IntervalTimer myTimer;
-//Adafruit_SSD1306 display(5);
-UI mui;
+MB::UI ui;
 
 const uint32_t kSampleRate = 96000;
 const uint16_t kAudioBlockSize = 28;
@@ -61,12 +58,11 @@ int16_t disp_sustain;
 int16_t release;
 int16_t disp_release;
 
-// User interface object
+
 volatile uint8_t done;
-uint8_t midi_event;
 
 
-void ui() {
+void old_ui() {
 
 	
 	if (butt.update() || strikeButt.update()) {
@@ -104,7 +100,7 @@ void ui() {
 void putSample(void) {
 	
 	if (!done) {
-		midi_event = ~midi_event;
+//		midi_event = ~midi_event;
 		//digitalWriteFast(13, midi_event);
 	}
 
@@ -160,7 +156,7 @@ extern "C" int main(void)
 	// Loop
 	while (1) {
 
-		ui();
+		old_ui();
 		// Set the pin to 1 to mark the begining of the render cycle
 		digitalWriteFast(23, HIGH);
 		// Clears the render buffer
@@ -170,7 +166,7 @@ extern "C" int main(void)
 			osc.set_pitch(pitch);
 			pre_pitch = pitch;
 		}
-		// Get the timbre and color parameters from the ui and set them
+		// Get the timbre and color parameters from the old_ui and set them
 		timbre = analogRead(A0) * 16;
 		color = analogRead(A1) * 16;
 		osc.set_pitch(analogRead(A3) * 16);
@@ -200,7 +196,8 @@ extern "C" int main(void)
 			//}
 		}
 		// Process the buttons and screen
-		//ui.process();
+		ui.update();
+		ui.draw();
 		// Reads the midi data
 		//	usbMIDI.read();
 		// Set the pin low to mark the end of rendering and processing
