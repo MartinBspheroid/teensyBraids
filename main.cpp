@@ -5,7 +5,7 @@
 #define STRIKE 20
 #include "WProgram.h"
 #include "Arduino.h"
-#include "LiquidCrystalFast.h"
+//#include "LiquidCrystalFast.h"
 #include "macro_oscillator.h"
 #include "envelope.h"
 #include "names.h"
@@ -16,7 +16,7 @@
 using namespace braids;
 
 
-LiquidCrystalFast lcd(4, 6, 5, 9, 10, 11, 12);
+//LiquidCrystalFast lcd(4, 6, 5, 9, 10, 11, 12);
 Bounce butt(BT, 10);
 Bounce strikeButt(STRIKE, 10);
 
@@ -63,20 +63,8 @@ int16_t disp_release;
 volatile uint8_t done;
 uint8_t midi_event;
 
-volatile uint8_t lcdCounter;
-bool LDC_ENABLE  = true;
-
-void displayStuff() {
-	lcd.clear();
-	lcd.setCursor(0,1);
-	lcd.print(names[shape]);		
-	
-	lcd.print(color >> 6);
-	lcd.print("  ");
-	lcd.print(timbre >> 4);
-}
 void initDisplay(){
-	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);     // initialize with the I2C addr 0x3C (for the 128x64)
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);     // initialize with the I2C addr 0x3C (for the 128x64)
   display.clearDisplay();   // clears the screen and buffer
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -95,7 +83,6 @@ void ui() {
 
 	
 	if (butt.update() || strikeButt.update()) {
-		displayStuff();
 		if (strikeButt.fallingEdge()) {
 
 			
@@ -117,7 +104,7 @@ void ui() {
 		// Sets the shape
 		MacroOscillatorShape osc_shape = static_cast<MacroOscillatorShape>(shape);//
 		osc.set_shape(osc_shape);
-		displayStuff();
+		
 			//MacroOscillatorShape osc_shape = static_cast<MacroOscillatorShape>(shape);//
 			//osc.set_shape(osc_shape);
 
@@ -156,7 +143,7 @@ int16_t pitch, pre_pitch;
 
 extern "C" int main(void)
 {
-	lcdCounter = 0;
+	
 	pinMode(BT, INPUT_PULLUP);
 	pinMode(STRIKE, INPUT_PULLUP);
 
@@ -180,14 +167,8 @@ extern "C" int main(void)
 	analogWriteResolution(12);
 
 	pitch = 44 << 7;
-//	lcd.init(4, 5, 9, 10, 11, 12);
-	lcd.begin(16, 2);
-	// Print a message to the LCD.
-	lcd.print("braidsTime!");
 
-	delay(500);
-	lcd.clear();
-	initDisplay();
+
 	
 	// Loop
 	while (1) {
